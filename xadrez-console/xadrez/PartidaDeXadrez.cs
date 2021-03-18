@@ -4,10 +4,10 @@ namespace xadrez
 {
     class PartidaDeXadrez
     {
-        public Tabuleiro tab { get; set; }
-        private int turno;
-        private Cor jogadorAtual;
-        public bool terminada;
+        public Tabuleiro tab { get; private set; }
+        public int turno { get; private set; }
+        public Cor jogadorAtual { get; private set; }
+        public bool terminada { get; private set; }
 
         public PartidaDeXadrez()
         {
@@ -17,6 +17,51 @@ namespace xadrez
             terminada = false;
             colocarPecas();
         }
+
+        public void realizaJogada(Posicao origem,  Posicao destino)
+        {
+            executaMovimento(origem, destino);
+            turno += turno;
+            mudaJogador();
+        }
+
+        public void validarPosicaoDeOrigem(Posicao pos)
+        {
+            if(tab.peca(pos) == null)
+            {
+                throw new TabuleiroException("Não existe peca na posicao de origem escolhida!");
+            }
+            if(jogadorAtual != tab.peca(pos).cor)
+            {
+                throw new TabuleiroException("A peca de origem escolhida não é sua");
+            }
+            if (!tab.peca(pos).existeMovimentosPossiveis())
+            {
+                throw new TabuleiroException("Não há movimentos possíveis para a peça selecionada");
+            }
+
+        }
+
+        public void validaPosicaoDeDestino(Posicao origem, Posicao destino)
+        {
+            if (!tab.peca(origem).podeMoverPara(destino))
+            {
+                throw new TabuleiroException("Posição de destino inválida");
+            }
+        }
+
+        public void mudaJogador()
+        {
+            if(jogadorAtual == Cor.Branca)
+            {
+                jogadorAtual = Cor.Preta;
+            }
+            else
+            {
+                jogadorAtual = Cor.Branca;
+            }
+        }
+
         public void executaMovimento(Posicao origem, Posicao destino)
         {
             Peca p = tab.retiraPeca(origem);
