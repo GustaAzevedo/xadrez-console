@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using tabuleiro;
 using xadrez;
-using System.Collections.Generic;
 
 namespace xadrez_console
 {
